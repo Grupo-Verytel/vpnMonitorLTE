@@ -45,6 +45,10 @@ class Settings(BaseSettings):
     # Retention
     SNAPSHOT_RETENTION_DAYS: int = 60
 
+    # LTE / Fibra channel inference
+    LTE_TRAFFIC_THRESHOLD_BYTES_PER_MIN: int = 10240
+    LTE_EVALUATION_WINDOW_MINUTES: int = 15
+
     # App metadata
     APP_NAME: str = "FortiGate VPN Monitor"
     APP_VERSION: str = "1.0.0"

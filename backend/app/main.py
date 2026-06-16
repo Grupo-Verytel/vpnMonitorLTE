@@ -8,7 +8,7 @@ from typing import AsyncGenerator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import health, internal, metrics, tunnels
+from app.api import health, internal, metrics, sites, tunnels
 from app.config import settings
 from app.core.logging import get_logger, setup_logging
 
@@ -75,4 +75,5 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(tunnels.router)
 app.include_router(metrics.router)
+app.include_router(sites.router)
 app.include_router(internal.router)

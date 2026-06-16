@@ -35,6 +35,8 @@ Backend en **FastAPI + Python 3.11** para monitorear túneles IPsec de un FortiG
 | `LOG_JSON` | Salida JSON estructurada | `true` |
 | `TZ` | Timezone del proceso | `America/Bogota` |
 | `SNAPSHOT_RETENTION_DAYS` | Días de retención de snapshots | `60` |
+| `LTE_TRAFFIC_THRESHOLD_BYTES_PER_MIN` | Umbral bytes/min para inferir LTE | `10240` |
+| `LTE_EVALUATION_WINDOW_MINUTES` | Ventana de evaluación de tráfico (min) | `15` |
 
 ## Setup local
 
@@ -149,10 +151,79 @@ railway run alembic upgrade head
 | GET | `/api/metrics/summary` | KPIs del último snapshot |
 | GET | `/api/metrics/top-consumers?limit=10&minutes=5` | Top consumidores |
 | GET | `/api/metrics/status-changes?hours=24` | Cambios up↔down |
+| GET | `/api/sites/summary` | KPIs LTE/Fibra/Down de sitios |
+| GET | `/api/sites` | Lista de sitios con canal inferido |
+| GET | `/api/sites/localities` | Localidades para filtros |
+| GET | `/api/sites/lte-usage-timeline?hours=24` | % sitios en LTE en el tiempo |
+| GET | `/api/sites/lte-ranking?days=7&limit=20` | Top sitios por uso LTE |
+| GET | `/api/sites/{tunnel_name}` | Detalle completo del sitio |
+| GET | `/api/sites/{tunnel_name}/traffic-history?hours=24` | Serie de tráfico |
+| GET | `/api/sites/{tunnel_name}/channel-timeline?hours=24` | Timeline de canal |
+| GET | `/api/sites/{tunnel_name}/events?hours=24` | Eventos de cambio de canal |
 | POST | `/internal/trigger-snapshot` | Snapshot manual (token) |
 | POST | `/internal/cleanup` | Cleanup manual (token) |
 
 Los endpoints `/internal/*` requieren header `X-Internal-Token`.
+
+### Inferencia LTE / Fibra
+
+Cada sitio tiene dos canales: **Fibra** (principal) y **LTE** (respaldo). El FortiGate solo ve tráfico cuando el failover usa LTE.
+
+| Condición | Canal inferido |
+|---|---|
+| Túnel `down` en último snapshot | `DOWN` |
+| Túnel `up` + tráfico ≥ umbral (bytes/min) | `LTE` |
+| Túnel `up` + tráfico < umbral | `FIBRA` |
+| Bucket sin snapshots | `UNKNOWN` |
+| Gap entre snapshots > 5 min | `data_complete: false` |
+
+Parámetros en `.env`: `LTE_TRAFFIC_THRESHOLD_BYTES_PER_MIN` (default 10240) y `LTE_EVALUATION_WINDOW_MINUTES` (default 15).
+
+### Vistas SQL (migración 003)
+
+- `v_latest_tunnel_state` — último snapshot agregado por túnel (todos los proxyid).
+- `v_sites_current` — catálogo activo unido al estado actual.
+
+```bash
+alembic upgrade head   # aplica 001 + 003
+```
+
+### Ejemplos curl — `/api/sites`
+
+```bash
+# KPIs del dashboard
+curl -s http://localhost:8000/api/sites/summary | jq
+
+# Lista completa de sitios
+curl -s http://localhost:8000/api/sites | jq
+
+# Filtrar por canal LTE
+curl -s "http://localhost:8000/api/sites?channel=LTE" | jq
+
+# Buscar por nombre
+curl -s "http://localhost:8000/api/sites?search=AK%2027" | jq
+
+# Localidades para filtro
+curl -s http://localhost:8000/api/sites/localities | jq
+
+# Timeline de uso LTE de la flota (24h)
+curl -s "http://localhost:8000/api/sites/lte-usage-timeline?hours=24" | jq
+
+# Ranking top sitios en LTE (7 días)
+curl -s "http://localhost:8000/api/sites/lte-ranking?days=7&limit=10" | jq
+
+# Detalle de un sitio
+curl -s http://localhost:8000/api/sites/CAV30CI1091869 | jq
+
+# Historial de tráfico
+curl -s "http://localhost:8000/api/sites/CAV30CI1091869/traffic-history?hours=24" | jq
+
+# Timeline de canal (barras LTE/Fibra/Down)
+curl -s "http://localhost:8000/api/sites/CAV30CI1091869/channel-timeline?hours=48" | jq
+
+# Eventos de cambio de canal
+curl -s "http://localhost:8000/api/sites/CAV30CI1091869/events?hours=24" | jq
+```
 
 ## Consideraciones operativas
 
