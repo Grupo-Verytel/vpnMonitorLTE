@@ -1,0 +1,56 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments (cualquier subcarpeta: backend/venv, etc.)
+venv/
+.venv/
+env/
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Build / packaging
+dist/
+build/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# --- Secretos y entorno (NUNCA subir) ---
+.env
+.env.*
+!.env.example
+
+# Certificados locales (RDS SSL, etc.)
+*.pem
+*.key
+
+# --- IDE ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+*.log
+
+# --- Frontend (cuando agregues React) ---
+node_modules/
+dist/
+.npm
+.next/
+out/
+.vite/
