@@ -9,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useLocalities } from '@/hooks/useLocalities';
 import type { SitesFilters } from '@/types/api';
 
 type Props = {
@@ -20,11 +19,9 @@ type Props = {
 };
 
 export function SitesFilters({ filters, onChange, showing, total }: Props) {
-  const { data: localitiesData } = useLocalities();
-
   const clearFilters = () => onChange({});
 
-  const hasFilters = Boolean(filters.search || filters.channel || filters.locality);
+  const hasFilters = Boolean(filters.search || filters.channel);
 
   return (
     <div className="sticky top-0 z-20 -mx-6 mb-6 border-b border-border bg-background/95 px-6 py-4 backdrop-blur">
@@ -53,25 +50,6 @@ export function SitesFilters({ filters, onChange, showing, total }: Props) {
             <SelectItem value="FIBRA">Fibra</SelectItem>
             <SelectItem value="LTE">LTE</SelectItem>
             <SelectItem value="DOWN">Caído</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={filters.locality ?? 'all'}
-          onValueChange={(v) =>
-            onChange({ ...filters, locality: v === 'all' ? undefined : v })
-          }
-        >
-          <SelectTrigger className="w-full lg:w-[200px]">
-            <SelectValue placeholder="Localidad" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todas las localidades</SelectItem>
-            {(localitiesData?.localities ?? []).map((loc) => (
-              <SelectItem key={loc} value={loc}>
-                {loc}
-              </SelectItem>
-            ))}
           </SelectContent>
         </Select>
 

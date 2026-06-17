@@ -71,11 +71,6 @@ export function SitesTable({ filters }: Props) {
         ),
       },
       {
-        accessorKey: 'locality',
-        header: 'Localidad',
-        cell: ({ row }) => row.original.locality ?? 'Sin asignar',
-      },
-      {
         accessorKey: 'channel',
         header: 'Canal',
         cell: ({ row }) => <ChannelBadge channel={row.original.channel} />,

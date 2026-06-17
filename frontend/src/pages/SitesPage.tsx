@@ -20,7 +20,6 @@ export default function SitesPage() {
 
   const queryFilters: SitesFiltersType = {
     channel: filters.channel,
-    locality: filters.locality,
     search: debouncedSearch,
   };
 

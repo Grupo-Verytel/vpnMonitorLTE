@@ -30,10 +30,6 @@ export function SiteInfoCard({ site }: Props) {
             </p>
           )}
           <p>
-            <span className="font-medium text-foreground">Localidad:</span>{' '}
-            {catalog?.locality ?? 'Sin asignar'}
-          </p>
-          <p>
             <span className="font-medium text-foreground">Proyecto:</span>{' '}
             {catalog?.project_code ?? '—'}
           </p>

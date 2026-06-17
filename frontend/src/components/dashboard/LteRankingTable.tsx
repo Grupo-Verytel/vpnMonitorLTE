@@ -11,15 +11,9 @@ import {
 } from '@/components/ui/table';
 import { formatDuration, formatPercent } from '@/lib/format';
 import { useLteRanking } from '@/hooks/useLteRanking';
-import { useSites } from '@/hooks/useSites';
 
 export function LteRankingTable() {
   const { data, isLoading, isError, refetch } = useLteRanking({ days: 7, limit: 10 });
-  const { data: sitesData } = useSites();
-
-  const localityMap = new Map(
-    sitesData?.items.map((s) => [s.tunnel_name, s.locality]) ?? [],
-  );
 
   return (
     <Card>
@@ -42,7 +36,6 @@ export function LteRankingTable() {
               <TableRow>
                 <TableHead className="w-12">#</TableHead>
                 <TableHead>Sitio</TableHead>
-                <TableHead>Localidad</TableHead>
                 <TableHead className="text-right">Minutos LTE</TableHead>
                 <TableHead className="text-right">% del tiempo</TableHead>
               </TableRow>
@@ -59,9 +52,6 @@ export function LteRankingTable() {
                     <TableCell>
                       <div className="font-medium">{item.site_name ?? item.tunnel_name}</div>
                       <div className="text-xs text-muted-foreground">{item.tunnel_name}</div>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {localityMap.get(item.tunnel_name) ?? 'Sin asignar'}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {formatDuration(item.lte_minutes)}

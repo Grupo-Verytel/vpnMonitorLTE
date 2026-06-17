@@ -14,7 +14,7 @@ export function SitesTableSkeleton() {
       <Table>
         <TableHeader>
           <TableRow>
-            {Array.from({ length: 8 }).map((_, i) => (
+            {Array.from({ length: 7 }).map((_, i) => (
               <TableHead key={i}>
                 <Skeleton className="h-4 w-20" />
               </TableHead>
@@ -24,7 +24,7 @@ export function SitesTableSkeleton() {
         <TableBody>
           {Array.from({ length: 10 }).map((_, row) => (
             <TableRow key={row}>
-              {Array.from({ length: 8 }).map((_, col) => (
+              {Array.from({ length: 7 }).map((_, col) => (
                 <TableCell key={col}>
                   <Skeleton
                     className="h-4 w-full animate-shimmer bg-gradient-to-r from-muted via-muted/50 to-muted"
