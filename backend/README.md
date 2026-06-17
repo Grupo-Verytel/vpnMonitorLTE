@@ -136,7 +136,29 @@ railway run alembic upgrade head
    ```bash
    railway run alembic upgrade head
    ```
-5. **Verificar**: `GET https://tu-app.railway.app/health` — el campo `db_connected` debe ser `true`.
+5. **Verificar**: `GET https://vpnmonitorlte-production.up.railway.app/health` — el campo `db_connected` debe ser `true`.
+
+### URL de producción
+
+| Recurso | URL |
+|---|---|
+| API pública | https://vpnmonitorlte-production.up.railway.app |
+| Healthcheck | https://vpnmonitorlte-production.up.railway.app/health |
+| Swagger | https://vpnmonitorlte-production.up.railway.app/docs |
+| Frontend (Vercel) | https://vpn-monitor-lte.vercel.app |
+
+`CORS_ORIGINS` en producción:
+
+```env
+CORS_ORIGINS=http://localhost:5173,https://vpn-monitor-lte.vercel.app
+```
+
+> No uses el dominio `vpnmonitorlte-backend.up.railway.app` en producción. Es un servicio/dominio distinto al activo (`vpnmonitorlte-production`).
+
+### Notas de deploy
+
+- No definir `startCommand` en `railway.toml` con `$PORT` literal; el `CMD` del `Dockerfile` ya enlaza el puerto correctamente.
+- Tras cambiar `CORS_ORIGINS`, Railway redeploya automáticamente; espera estado **Active** antes de probar desde Vercel.
 
 ## Endpoints
 

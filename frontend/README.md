@@ -35,13 +35,57 @@ La app corre en [http://localhost:5173](http://localhost:5173).
 | `VITE_REFETCH_INTERVAL_MS` | Intervalo de refetch en ms | `30000` |
 | `VITE_APP_NAME` | Nombre en sidebar | `FortiGate VPN Monitor` |
 
-## Deploy en Vercel
+## Deploy en producción
+
+URLs activas del entorno productivo:
+
+| Servicio | URL |
+|---|---|
+| **Frontend (Vercel)** | https://vpn-monitor-lte.vercel.app |
+| **Backend (Railway)** | https://vpnmonitorlte-production.up.railway.app |
+
+> **Importante:** Usa solo el dominio `vpnmonitorlte-production`. El dominio `vpnmonitorlte-backend` es un servicio distinto y no debe usarse en producción.
+
+### Variables en Vercel (Production)
+
+Settings → Environment Variables → marcar **Production**:
+
+```env
+VITE_API_BASE_URL=https://vpnmonitorlte-production.up.railway.app
+VITE_REFETCH_INTERVAL_MS=30000
+VITE_APP_NAME=FortiGate VPN Monitor LTE
+```
+
+Después de cambiar cualquier `VITE_*`, haz **Redeploy** en Vercel. Las variables se inyectan en **build time**; guardar sin redeploy no actualiza el JS en producción.
+
+### Variables en Railway (backend)
+
+En el servicio con dominio `vpnmonitorlte-production`:
+
+```env
+CORS_ORIGINS=http://localhost:5173,https://vpn-monitor-lte.vercel.app
+```
+
+Sin barra `/` al final en las URLs.
+
+### Verificación tras un deploy
+
+1. Backend: `https://vpnmonitorlte-production.up.railway.app/health` → JSON con `status: ok`
+2. API: `https://vpnmonitorlte-production.up.railway.app/api/sites/summary` → JSON con KPIs
+3. Frontend: F12 → Network → las peticiones deben ir a `vpnmonitorlte-production.up.railway.app`
+
+### Si ves CORS o 404 tras cambiar variables
+
+- **Vercel:** espera a que termine el redeploy; el bundle anterior puede seguir apuntando al backend viejo unos minutos.
+- **Railway:** espera deploy **Active** tras cambiar `CORS_ORIGINS`.
+- Confirma en Network que no se llame a `vpnmonitorlte-backend.up.railway.app`.
+
+## Deploy en Vercel (primera vez)
 
 1. Conectar el repositorio en [vercel.com](https://vercel.com).
 2. Configurar **Root Directory** como `frontend`.
 3. Framework preset: **Vite**.
-4. Agregar variable de entorno:
-   - `VITE_API_BASE_URL` = `https://fortigate-vpn-monitor-backend.up.railway.app` (o tu URL de Railway)
+4. Agregar las variables de entorno de la sección [Deploy en producción](#deploy-en-producción).
 5. Deploy. El archivo `vercel.json` incluye rewrites SPA.
 
 ## Estructura de carpetas
