@@ -20,7 +20,7 @@ type Props = {
 
 export function TimeRangeToggle({ value, onChange, className }: Props) {
   return (
-    <div className={cn('inline-flex rounded-md border border-slate-200 bg-white p-0.5', className)}>
+    <div className={cn('inline-flex rounded-md border border-border bg-card p-0.5', className)}>
       {OPTIONS.map((opt) => (
         <Button
           key={opt.value}

@@ -11,6 +11,16 @@
       rel="stylesheet"
     />
     <title>FortiGate VPN Monitor</title>
+    <script>
+      (function () {
+        var key = 'vpn-monitor-theme';
+        var stored = localStorage.getItem(key);
+        var dark =
+          stored === 'dark' ||
+          (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

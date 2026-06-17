@@ -70,7 +70,7 @@ export function AppLayout() {
   }, [queryClient, isFetching]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       <Sidebar
         collapsed={sidebarCollapsed}
         mobileOpen={mobileOpen}

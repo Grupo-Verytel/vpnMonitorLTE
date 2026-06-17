@@ -34,9 +34,9 @@ const PAGE_SIZE = 25;
 
 const rowBorderClass: Record<string, string> = {
   FIBRA: 'border-l-green-500',
-  LTE: 'border-l-yellow-500 bg-yellow-50/30',
-  DOWN: 'border-l-red-500 bg-red-50/30',
-  UNKNOWN: 'border-l-slate-300',
+  LTE: 'border-l-yellow-500 bg-yellow-50/30 dark:bg-yellow-950/20',
+  DOWN: 'border-l-red-500 bg-red-50/30 dark:bg-red-950/20',
+  UNKNOWN: 'border-l-slate-300 dark:border-l-slate-600',
 };
 
 type Props = {
@@ -66,7 +66,7 @@ export function SitesTable({ filters }: Props) {
         cell: ({ row }) => (
           <div>
             <div className="font-medium">{row.original.site_name ?? row.original.tunnel_name}</div>
-            <div className="text-xs text-slate-500">{row.original.tunnel_name}</div>
+            <div className="text-xs text-muted-foreground">{row.original.tunnel_name}</div>
           </div>
         ),
       },
@@ -139,7 +139,7 @@ export function SitesTable({ filters }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((hg) => (
@@ -159,7 +159,7 @@ export function SitesTable({ filters }: Props) {
               <TableRow
                 key={row.id}
                 className={cn(
-                  'border-l-[3px] hover:bg-slate-50',
+                  'border-l-[3px] hover:bg-muted/50',
                   rowBorderClass[row.original.channel],
                 )}
               >
@@ -176,7 +176,7 @@ export function SitesTable({ filters }: Props) {
 
       {table.getPageCount() > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-muted-foreground">
             Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}
           </p>
           <div className="flex gap-2">

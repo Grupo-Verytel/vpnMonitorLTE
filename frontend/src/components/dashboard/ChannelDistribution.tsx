@@ -42,7 +42,7 @@ export function ChannelDistribution() {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">Distribución actual</CardTitle>
-        <p className="text-sm text-slate-600">Sitios por canal en este momento</p>
+        <p className="text-sm text-muted-foreground">Sitios por canal en este momento</p>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col items-center gap-6 md:flex-row">
@@ -71,8 +71,8 @@ export function ChannelDistribution() {
               </PieChart>
             </ResponsiveContainer>
             <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-semibold text-slate-900">{data.total_sites}</span>
-              <span className="text-xs text-slate-500">total</span>
+              <span className="text-3xl font-semibold text-foreground">{data.total_sites}</span>
+              <span className="text-xs text-muted-foreground">total</span>
             </div>
           </div>
 
@@ -84,9 +84,9 @@ export function ChannelDistribution() {
                     className="size-3 rounded-full"
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="font-medium text-slate-700">{item.name}</span>
+                  <span className="font-medium text-foreground">{item.name}</span>
                 </div>
-                <span className="tabular-nums text-slate-600">
+                <span className="tabular-nums text-muted-foreground">
                   {item.value} ({formatPercent(item.pct)})
                 </span>
               </li>

@@ -25,7 +25,7 @@ export function LteRankingTable() {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">Top sitios en LTE</CardTitle>
-        <p className="text-sm text-slate-600">Últimos 7 días — mayor tiempo en canal de respaldo</p>
+        <p className="text-sm text-muted-foreground">Últimos 7 días — mayor tiempo en canal de respaldo</p>
       </CardHeader>
       <CardContent>
         {isLoading && (
@@ -55,18 +55,18 @@ export function LteRankingTable() {
                     : 0;
                 return (
                   <TableRow key={item.tunnel_name}>
-                    <TableCell className="font-medium text-slate-500">{index + 1}</TableCell>
+                    <TableCell className="font-medium text-muted-foreground">{index + 1}</TableCell>
                     <TableCell>
                       <div className="font-medium">{item.site_name ?? item.tunnel_name}</div>
-                      <div className="text-xs text-slate-500">{item.tunnel_name}</div>
+                      <div className="text-xs text-muted-foreground">{item.tunnel_name}</div>
                     </TableCell>
-                    <TableCell className="text-slate-600">
+                    <TableCell className="text-muted-foreground">
                       {localityMap.get(item.tunnel_name) ?? 'Sin asignar'}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {formatDuration(item.lte_minutes)}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums text-yellow-700">
+                    <TableCell className="text-right tabular-nums text-yellow-700 dark:text-yellow-400">
                       {formatPercent(pct)}
                     </TableCell>
                   </TableRow>

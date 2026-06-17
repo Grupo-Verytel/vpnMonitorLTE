@@ -29,8 +29,8 @@ export default function SitesPage() {
   return (
     <div className="space-y-2">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Sitios</h1>
-        <p className="text-sm text-slate-600">
+        <h1 className="text-2xl font-semibold text-foreground">Sitios</h1>
+        <p className="text-sm text-muted-foreground">
           Lista de sitios remotos con canal actual y métricas de tráfico
         </p>
       </div>

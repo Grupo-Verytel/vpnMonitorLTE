@@ -29,7 +29,7 @@ export function LteTimelineChart({ hours, onHoursChange }: Props) {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div>
           <CardTitle className="text-lg">Uso LTE en el tiempo</CardTitle>
-          <p className="text-sm text-slate-600">Porcentaje de sitios en canal LTE</p>
+          <p className="text-sm text-muted-foreground">Porcentaje de sitios en canal LTE</p>
         </div>
         <TimeRangeToggle value={hours} onChange={onHoursChange} />
       </CardHeader>
@@ -45,29 +45,31 @@ export function LteTimelineChart({ hours, onHoursChange }: Props) {
                   <stop offset="95%" stopColor="#eab308" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               <XAxis
                 dataKey="timestamp"
                 tickFormatter={(v) => formatTime(v)}
                 interval="preserveStartEnd"
                 minTickGap={40}
-                tick={{ fontSize: 12, fill: '#64748b' }}
+                tick={{ fontSize: 12 }}
+                className="fill-muted-foreground"
               />
               <YAxis
                 domain={[0, 100]}
                 tickFormatter={(v) => `${v}%`}
-                tick={{ fontSize: 12, fill: '#64748b' }}
+                tick={{ fontSize: 12 }}
+                className="fill-muted-foreground"
               />
               <Tooltip
                 content={({ active, payload }) => {
                   if (!active || !payload?.[0]) return null;
                   const point = payload[0].payload as (typeof data.points)[0];
                   return (
-                    <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-md">
+                    <div className="chart-tooltip">
                       <p className="font-medium">{formatDate(point.timestamp)}</p>
-                      <p className="text-yellow-700">LTE: {point.sites_lte} ({point.pct_lte.toFixed(1)}%)</p>
-                      <p className="text-green-700">Fibra: {point.sites_fibra}</p>
-                      <p className="text-red-700">Caídos: {point.sites_down}</p>
+                      <p className="text-yellow-700 dark:text-yellow-400">LTE: {point.sites_lte} ({point.pct_lte.toFixed(1)}%)</p>
+                      <p className="text-green-700 dark:text-green-400">Fibra: {point.sites_fibra}</p>
+                      <p className="text-red-700 dark:text-red-400">Caídos: {point.sites_down}</p>
                     </div>
                   );
                 }}

@@ -11,7 +11,7 @@ type Props = {
 export function SiteStatsGroup({ title, stats }: Props) {
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-medium text-slate-600">{title}</h3>
+      <h3 className="text-sm font-medium text-muted-foreground">{title}</h3>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <KpiCard
           label="Tiempo en LTE"

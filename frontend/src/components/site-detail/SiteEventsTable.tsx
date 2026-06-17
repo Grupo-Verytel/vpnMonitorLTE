@@ -38,7 +38,7 @@ export function SiteEventsTable({ tunnelName, hours }: Props) {
   const { data, isLoading, isError, refetch } = useSiteEvents(tunnelName, hours);
 
   if (isLoading) {
-    return <div className="h-48 animate-pulse rounded-lg bg-slate-100" />;
+    return <div className="h-48 animate-pulse rounded-lg bg-muted" />;
   }
 
   if (isError) {
@@ -68,11 +68,11 @@ export function SiteEventsTable({ tunnelName, hours }: Props) {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <ChannelBadge channel={event.from_channel} size="sm" />
-                  <span className="text-slate-400">→</span>
+                  <span className="text-muted-foreground">→</span>
                   <ChannelBadge channel={event.to_channel} size="sm" />
                 </div>
               </TableCell>
-              <TableCell className="text-slate-600">
+              <TableCell className="text-muted-foreground">
                 {event.duration_minutes != null
                   ? formatDuration(event.duration_minutes)
                   : '—'}
@@ -80,7 +80,7 @@ export function SiteEventsTable({ tunnelName, hours }: Props) {
               <TableCell>
                 {trend === 'up' && <ArrowUp className="size-4 text-green-500" />}
                 {trend === 'down' && <ArrowDown className="size-4 text-red-500" />}
-                {trend === 'neutral' && <Minus className="size-4 text-slate-400" />}
+                {trend === 'neutral' && <Minus className="size-4 text-muted-foreground" />}
               </TableCell>
             </TableRow>
           );

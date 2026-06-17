@@ -10,7 +10,7 @@ import {
 
 export function SitesTableSkeleton() {
   return (
-    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white">
+    <div className="overflow-hidden rounded-lg border border-border bg-card">
       <Table>
         <TableHeader>
           <TableRow>
@@ -27,7 +27,7 @@ export function SitesTableSkeleton() {
               {Array.from({ length: 8 }).map((_, col) => (
                 <TableCell key={col}>
                   <Skeleton
-                    className="h-4 w-full animate-shimmer bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200"
+                    className="h-4 w-full animate-shimmer bg-gradient-to-r from-muted via-muted/50 to-muted"
                   />
                 </TableCell>
               ))}

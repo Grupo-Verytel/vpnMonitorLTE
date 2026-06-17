@@ -66,7 +66,7 @@ export function TrafficChart({ tunnelName, hours, onHoursChange }: Props) {
                   <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
               {lteBands.map((band, i) => (
                 <ReferenceArea
                   key={i}
@@ -80,12 +80,14 @@ export function TrafficChart({ tunnelName, hours, onHoursChange }: Props) {
               <XAxis
                 dataKey="timestamp"
                 tickFormatter={(v) => formatTime(v)}
-                tick={{ fontSize: 12, fill: '#64748b' }}
+                tick={{ fontSize: 12 }}
+                className="fill-muted-foreground"
                 minTickGap={40}
               />
               <YAxis
                 tickFormatter={(v) => formatBytes(v)}
-                tick={{ fontSize: 12, fill: '#64748b' }}
+                tick={{ fontSize: 12 }}
+                className="fill-muted-foreground"
                 width={70}
               />
               <Tooltip
@@ -93,11 +95,11 @@ export function TrafficChart({ tunnelName, hours, onHoursChange }: Props) {
                   if (!active || !payload?.[0]) return null;
                   const point = payload[0].payload as (typeof data.points)[0];
                   return (
-                    <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-md">
+                    <div className="chart-tooltip">
                       <p className="font-medium">{formatDate(point.timestamp)}</p>
-                      <p className="text-blue-600">Entrada: {formatBytes(point.incoming_bytes)}</p>
-                      <p className="text-cyan-600">Salida: {formatBytes(point.outgoing_bytes)}</p>
-                      <p className="text-slate-600">Canal: {point.channel}</p>
+                      <p className="text-blue-600 dark:text-blue-400">Entrada: {formatBytes(point.incoming_bytes)}</p>
+                      <p className="text-cyan-600 dark:text-cyan-400">Salida: {formatBytes(point.outgoing_bytes)}</p>
+                      <p className="text-muted-foreground">Canal: {point.channel}</p>
                     </div>
                   );
                 }}

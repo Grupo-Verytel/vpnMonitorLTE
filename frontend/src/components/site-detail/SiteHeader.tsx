@@ -22,8 +22,8 @@ export function SiteHeader({ site, onRefresh, isRefreshing }: Props) {
           Volver
         </Button>
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">{name}</h1>
-          <p className="text-sm text-slate-500">{site.tunnel_name}</p>
+          <h1 className="text-2xl font-semibold text-foreground">{name}</h1>
+          <p className="text-sm text-muted-foreground">{site.tunnel_name}</p>
         </div>
       </div>
       <Button variant="outline" size="sm" onClick={onRefresh} disabled={isRefreshing}>

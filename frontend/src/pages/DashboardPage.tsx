@@ -10,8 +10,8 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Dashboard</h1>
-        <p className="text-sm text-slate-600">
+        <h1 className="text-2xl font-semibold text-foreground">Dashboard</h1>
+        <p className="text-sm text-muted-foreground">
           Vista general del estado de los sitios remotos VPN
         </p>
       </div>

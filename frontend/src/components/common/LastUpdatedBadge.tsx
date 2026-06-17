@@ -12,11 +12,11 @@ type Props = {
 };
 
 function getFreshnessColor(lastUpdated?: Date): string {
-  if (!lastUpdated) return 'text-slate-500';
+  if (!lastUpdated) return 'text-muted-foreground';
   const seconds = (Date.now() - lastUpdated.getTime()) / 1000;
-  if (seconds < 60) return 'text-green-600';
-  if (seconds < 300) return 'text-yellow-600';
-  return 'text-red-600';
+  if (seconds < 60) return 'text-green-600 dark:text-green-400';
+  if (seconds < 300) return 'text-yellow-600 dark:text-yellow-400';
+  return 'text-red-600 dark:text-red-400';
 }
 
 export function LastUpdatedBadge({ lastUpdated, isFetching, className }: Props) {

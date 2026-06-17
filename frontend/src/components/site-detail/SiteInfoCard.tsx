@@ -17,12 +17,12 @@ export function SiteInfoCard({ site }: Props) {
       </CardHeader>
       <CardContent className="grid gap-4 sm:grid-cols-2">
         <div>
-          <p className="text-2xl font-semibold text-slate-900">
+          <p className="text-2xl font-semibold text-foreground">
             {catalog?.site_name ?? site.tunnel_name}
           </p>
-          <p className="mt-1 font-mono text-sm text-slate-500">{site.tunnel_name}</p>
+          <p className="mt-1 font-mono text-sm text-muted-foreground">{site.tunnel_name}</p>
         </div>
-        <div className="space-y-2 text-sm text-slate-600">
+        <div className="space-y-2 text-sm text-muted-foreground">
           {catalog?.site_address && (
             <p className="flex items-start gap-2">
               <MapPin className="mt-0.5 size-4 shrink-0" />
@@ -30,11 +30,11 @@ export function SiteInfoCard({ site }: Props) {
             </p>
           )}
           <p>
-            <span className="font-medium text-slate-700">Localidad:</span>{' '}
+            <span className="font-medium text-foreground">Localidad:</span>{' '}
             {catalog?.locality ?? 'Sin asignar'}
           </p>
           <p>
-            <span className="font-medium text-slate-700">Proyecto:</span>{' '}
+            <span className="font-medium text-foreground">Proyecto:</span>{' '}
             {catalog?.project_code ?? '—'}
           </p>
           {catalog?.contact_person && (
@@ -44,7 +44,7 @@ export function SiteInfoCard({ site }: Props) {
             </p>
           )}
           <p>
-            <span className="font-medium text-slate-700">Gateway remoto:</span>{' '}
+            <span className="font-medium text-foreground">Gateway remoto:</span>{' '}
             {site.current.remote_gateway ?? '—'}
           </p>
         </div>

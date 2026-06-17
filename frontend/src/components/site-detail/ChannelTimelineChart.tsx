@@ -42,7 +42,7 @@ export function ChannelTimelineChart({ tunnelName, hours, onHoursChange }: Props
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <div>
           <CardTitle className="text-lg">Timeline de canal</CardTitle>
-          <p className="text-sm text-slate-600">Buckets de 15 minutos</p>
+          <p className="text-sm text-muted-foreground">Buckets de 15 minutos</p>
         </div>
         <TimeRangeToggle value={hours} onChange={onHoursChange} />
       </CardHeader>
@@ -51,7 +51,7 @@ export function ChannelTimelineChart({ tunnelName, hours, onHoursChange }: Props
         {isError && <ErrorAlert onRetry={() => refetch()} />}
         {data && !isError && buckets.length > 0 && (
           <>
-            <div className="flex h-10 w-full overflow-hidden rounded-md border border-slate-200">
+            <div className="flex h-10 w-full overflow-hidden rounded-md border border-border">
               {buckets.map((bucket, index) => (
                 <div
                   key={`${bucket.bucket_start}-${index}`}
@@ -67,26 +67,26 @@ export function ChannelTimelineChart({ tunnelName, hours, onHoursChange }: Props
               ))}
             </div>
 
-            <div className="mt-2 flex justify-between text-xs text-slate-500">
+            <div className="mt-2 flex justify-between text-xs text-muted-foreground">
               {timeLabels.map((t) => (
                 <span key={t.index}>{t.label}</span>
               ))}
             </div>
 
             {hoveredIndex != null && buckets[hoveredIndex] && (
-              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
+              <div className="mt-4 rounded-lg border border-border bg-muted/50 p-3 text-sm">
                 <p className="font-medium">
                   {formatTime(buckets[hoveredIndex].bucket_start)} –{' '}
                   {formatTime(buckets[hoveredIndex].bucket_end)}
                 </p>
-                <p className="text-slate-600">{formatDate(buckets[hoveredIndex].bucket_start)}</p>
+                <p className="text-muted-foreground">{formatDate(buckets[hoveredIndex].bucket_start)}</p>
                 <div className="mt-2">
                   <ChannelBadge channel={buckets[hoveredIndex].channel} size="sm" />
                 </div>
               </div>
             )}
 
-            <div className="mt-4 flex flex-wrap gap-4 text-xs text-slate-600">
+            <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <span className="size-3 rounded-sm bg-green-500" /> Fibra
               </span>
@@ -103,7 +103,7 @@ export function ChannelTimelineChart({ tunnelName, hours, onHoursChange }: Props
           </>
         )}
         {data && !isError && buckets.length === 0 && (
-          <p className="text-sm text-slate-500">Sin datos de timeline en este período.</p>
+          <p className="text-sm text-muted-foreground">Sin datos de timeline en este período.</p>
         )}
       </CardContent>
     </Card>

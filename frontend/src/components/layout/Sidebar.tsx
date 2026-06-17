@@ -31,15 +31,15 @@ export function Sidebar({ collapsed, mobileOpen, onMobileClose, onMobileToggle }
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex flex-col border-r border-slate-200 bg-white transition-all duration-200',
+          'fixed inset-y-0 left-0 z-50 flex flex-col border-r border-border bg-card transition-all duration-200',
           collapsed ? 'w-[72px]' : 'w-60',
           mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
         )}
       >
-        <div className="flex h-[60px] items-center gap-2 border-b border-slate-200 px-4">
-          <Shield className="size-6 shrink-0 text-slate-800" />
+        <div className="flex h-[60px] items-center gap-2 border-b border-border px-4">
+          <Shield className="size-6 shrink-0 text-foreground" />
           {!collapsed && (
-            <span className="text-sm font-semibold leading-tight text-slate-900">{appName}</span>
+            <span className="text-sm font-semibold leading-tight text-foreground">{appName}</span>
           )}
           <Button
             variant="ghost"
@@ -63,8 +63,8 @@ export function Sidebar({ collapsed, mobileOpen, onMobileClose, onMobileToggle }
                 cn(
                   'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
                   isActive
-                    ? 'bg-slate-100 text-slate-900'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
+                    ? 'bg-accent text-foreground'
+                    : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
                   collapsed && 'justify-center px-2',
                 )
               }
