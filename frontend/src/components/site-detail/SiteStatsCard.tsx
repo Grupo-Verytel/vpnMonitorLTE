@@ -3,6 +3,9 @@ import { formatDuration } from '@/lib/format';
 import type { SitePeriodStats } from '@/types/api';
 import { Activity, Cable, Clock, Radio } from 'lucide-react';
 
+/** Oculto temporalmente — reactivar cuando haga falta. */
+const SHOW_DOWN_AND_CHANNEL_STATS = false;
+
 type Props = {
   title: string;
   stats: SitePeriodStats;
@@ -25,18 +28,22 @@ export function SiteStatsGroup({ title, stats }: Props) {
           icon={Cable}
           color="green"
         />
-        <KpiCard
-          label="Tiempo caído"
-          value={formatDuration(stats.down_minutes)}
-          icon={Clock}
-          color="red"
-        />
-        <KpiCard
-          label="Cambios de canal"
-          value={stats.channel_changes}
-          icon={Activity}
-          color="gray"
-        />
+        {SHOW_DOWN_AND_CHANNEL_STATS && (
+          <>
+            <KpiCard
+              label="Tiempo caído"
+              value={formatDuration(stats.down_minutes)}
+              icon={Clock}
+              color="red"
+            />
+            <KpiCard
+              label="Cambios de canal"
+              value={stats.channel_changes}
+              icon={Activity}
+              color="gray"
+            />
+          </>
+        )}
       </div>
     </div>
   );
