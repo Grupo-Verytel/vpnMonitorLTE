@@ -276,16 +276,24 @@ export SSL_CERT_FILE=/path/to/fortigate-ca.pem
 - Los detalles se eliminan en cascada (FK `ON DELETE CASCADE`).
 - Cleanup manual: `POST /internal/cleanup` con `X-Internal-Token`.
 
-### Agregar entradas al catálogo de túneles
+### Catálogo de túneles (`vpn_tunnels_catalog`)
 
-Insertar directamente en `vpn_tunnels_catalog`:
+En cada snapshot exitoso, el backend **sincroniza automáticamente** el catálogo: todo túnel
+presente en FortiGate que aún no exista en `vpn_tunnels_catalog` se crea con `is_active = TRUE`,
+usando el `name` del túnel como `tunnel_name`/`site_name` y el campo `comments` como
+`site_address`.
+
+Para enriquecer metadatos (localidad, contacto, etc.) o desactivar un sitio sin borrarlo,
+editar la fila manualmente:
 
 ```sql
-INSERT INTO vpn_tunnels_catalog (tunnel_name, site_name, site_address, locality, project_code, contact_person, notes)
-VALUES ('nombre-tunel-fortigate', 'Sede Principal', 'Calle 123', 'Bogotá', 'PRJ-001', 'Juan Pérez', 'Notas');
+UPDATE vpn_tunnels_catalog
+SET locality = 'Bogotá', contact_person = 'Juan Pérez', is_active = FALSE
+WHERE tunnel_name = 'nombre-tunel-fortigate';
 ```
 
-El `tunnel_name` debe coincidir exactamente con el nombre del túnel en FortiGate.
+También se puede insertar manualmente antes de que aparezca en FortiGate; el auto-sync no
+sobrescribe entradas existentes.
 
 ## Arquitectura
 

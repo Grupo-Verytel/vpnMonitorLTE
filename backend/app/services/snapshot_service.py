@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import FortiGateAPIError
 from app.core.logging import get_logger
+from app.models.catalog import TunnelCatalog
 from app.models.snapshot import SnapshotDetail, SnapshotHeader
 from app.services.fortigate_client import FortiGateClient
 
@@ -43,6 +44,7 @@ class SnapshotService:
             tunnels = tunnel_data.get("results", [])
 
             tunnels_up, tunnels_down = self._count_tunnel_statuses(tunnels)
+            catalog_created = self._sync_catalog_from_tunnels(tunnels)
 
             header = SnapshotHeader(
                 snapshot_time=start.replace(tzinfo=None),
@@ -68,6 +70,7 @@ class SnapshotService:
                 tunnels=len(tunnels),
                 tunnels_up=tunnels_up,
                 tunnels_down=tunnels_down,
+                catalog_created=catalog_created,
                 duration_ms=fetch_duration_ms,
                 snapshot_id=header.id,
             )
@@ -106,6 +109,51 @@ class SnapshotService:
                 else:
                     down += 1
         return up, down
+
+    def _sync_catalog_from_tunnels(self, tunnels: list[dict[str, Any]]) -> int:
+        """Create catalog entries for FortiGate tunnels not yet in vpn_tunnels_catalog."""
+        tunnel_meta: dict[str, dict[str, Any]] = {}
+        for tunnel in tunnels:
+            name = self._safe_str(tunnel.get("name"), max_len=100)
+            if not name:
+                continue
+            tunnel_meta[name] = tunnel
+
+        if not tunnel_meta:
+            return 0
+
+        tunnel_names = list(tunnel_meta.keys())
+        existing = set(
+            self._db.execute(
+                select(TunnelCatalog.tunnel_name).where(
+                    TunnelCatalog.tunnel_name.in_(tunnel_names)
+                )
+            ).scalars()
+        )
+
+        new_rows: list[TunnelCatalog] = []
+        for name, tunnel in tunnel_meta.items():
+            if name in existing:
+                continue
+            new_rows.append(
+                TunnelCatalog(
+                    tunnel_name=name,
+                    site_name=name,
+                    site_address=self._safe_str(tunnel.get("comments"), max_len=300),
+                    is_active=True,
+                    notes="Auto-creado desde FortiGate",
+                )
+            )
+
+        if new_rows:
+            self._db.add_all(new_rows)
+            logger.info(
+                "catalog_sync_completed",
+                created=len(new_rows),
+                tunnel_names=[row.tunnel_name for row in new_rows],
+            )
+
+        return len(new_rows)
 
     def _get_previous_snapshot(self, exclude_header_id: int | None = None) -> Optional[SnapshotHeader]:
         """Return the most recent successful snapshot header, optionally excluding one."""

@@ -6,6 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 from sqlalchemy.orm import Session
 
+from app.models.catalog import TunnelCatalog
 from app.models.snapshot import SnapshotDetail, SnapshotHeader
 from app.services.snapshot_service import SnapshotService
 
@@ -195,3 +196,45 @@ def test_cleanup_old_snapshots(db_session: Session, mock_client: MagicMock) -> N
     assert deleted == 1
     remaining = db_session.query(SnapshotHeader).count()
     assert remaining == 0
+
+
+def test_take_snapshot_syncs_catalog(db_session: Session, mock_client: MagicMock) -> None:
+    """New FortiGate tunnels are auto-registered in vpn_tunnels_catalog."""
+    mock_client.get_ipsec_tunnels.return_value = {
+        "results": [
+            {
+                "name": "CAV30CI9999999",
+                "comments": "CL 1 KR 1",
+                "rgwy": "10.0.0.1",
+                "proxyid": [{"p2name": "CAV30CI9999999", "status": "up"}],
+            }
+        ]
+    }
+
+    service = SnapshotService(db_session, mock_client)
+    header = service.take_snapshot()
+
+    assert header.status == "success"
+    catalog = db_session.get(TunnelCatalog, "CAV30CI9999999")
+    assert catalog is not None
+    assert catalog.site_name == "CAV30CI9999999"
+    assert catalog.site_address == "CL 1 KR 1"
+    assert catalog.is_active is True
+    assert catalog.notes == "Auto-creado desde FortiGate"
+
+
+def test_take_snapshot_catalog_sync_is_idempotent(
+    db_session: Session, mock_client: MagicMock
+) -> None:
+    """Repeated snapshots do not duplicate catalog entries."""
+    service = SnapshotService(db_session, mock_client)
+
+    service.take_snapshot()
+    service.take_snapshot()
+
+    count = (
+        db_session.query(TunnelCatalog)
+        .filter(TunnelCatalog.tunnel_name == "site-tunnel-1")
+        .count()
+    )
+    assert count == 1
